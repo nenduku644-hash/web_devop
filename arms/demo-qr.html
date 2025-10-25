@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AttendSmart - Demo QR Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f7ff;
+        }
+        
+        .demo-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #4361ee;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .qr-section {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        
+        .qr-form {
+            flex: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            background: #3f37c9;
+        }
+        
+        .qr-display {
+            text-align: center;
+            padding: 20px;
+            border: 2px dashed #e9ecef;
+            border-radius: 12px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-display img {
+            max-width: 200px;
+            height: auto;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .info-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .info-box li {
+            margin-bottom: 5px;
+        }
+        
+        .demo-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .demo-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: #4caf50;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        
+        .demo-links a:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🎓 AttendSmart - QR Code Demo</h1>
+        
+        <div class="info-box">
+            <h3>How to Test the System:</h3>
+            <ul>
+                <li><strong>Step 1:</strong> Fill in the form below and generate a QR code</li>
+                <li><strong>Step 2:</strong> Open the Student Dashboard in another tab/window</li>
+                <li><strong>Step 3:</strong> Go to "Scan QR Code" section and scan the generated QR code</li>
+                <li><strong>Step 4:</strong> Watch the attendance being marked automatically!</li>
+            </ul>
+        </div>
+        
+        <div class="qr-section">
+            <div class="qr-form">
+                <div class="form-group">
+                    <label for="courseSelect">Course:</label>
+                    <select id="courseSelect" class="form-control">
+                        <option value="CS101">CS101 - Introduction to Programming</option>
+                        <option value="CS201">CS201 - Data Structures</option>
+                        <option value="CS301">CS301 - Database Management</option>
+                        <option value="CS401">CS401 - Web Development</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="classDate">Date:</label>
+                    <input type="date" id="classDate" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="classTime">Time:</label>
+                    <input type="time" id="classTime" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="duration">Duration (minutes):</label>
+                    <input type="number" id="duration" class="form-control" value="60" min="15" max="180">
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" class="form-control" value="Room 101, Block A" placeholder="Enter class location">
+                </div>
+                
+                <button class="btn" onclick="generateDemoQR()">Generate QR Code</button>
+                <button class="btn" onclick="downloadDemoQR()">Download QR Code</button>
+            </div>
+            
+            <div class="qr-display" id="qrDisplay">
+                <div>
+                    <p style="color: #666;">QR Code will appear here</p>
+                    <p style="font-size: 0.9rem; color: #999;">Fill the form and click "Generate QR Code"</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-links">
+            <a href="index.html">🏠 Main Page</a>
+            <a href="faculty-dashboard.html">👨‍🏫 Faculty Dashboard</a>
+            <a href="student-dashboard.html">👨‍🎓 Student Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        let currentQRCanvas = null;
+        let currentQRData = null;
+        
+        // Set default date and time
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('classDate').value = today;
+            
+            const now = new Date();
+            const timeString = now.toTimeString().slice(0, 5);
+            document.getElementById('classTime').value = timeString;
+        });
+        
+        function generateDemoQR() {
+            const course = document.getElementById('courseSelect').value;
+            const date = document.getElementById('classDate').value;
+            const time = document.getElementById('classTime').value;
+            const duration = document.getElementById('duration').value;
+            const location = document.getElementById('location').value;
+            
+            if (!course || !date || !time || !duration || !location) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Create QR code data
+            const qrData = {
+                course: course,
+                date: date,
+                time: time,
+                duration: duration,
+                location: location,
+                faculty: 'Dr. Sarah Johnson',
+                timestamp: new Date().toISOString()
+            };
+            
+            const qrString = JSON.stringify(qrData);
+            
+            // Generate QR code
+            QRCode.toCanvas(document.createElement('canvas'), qrString, {
+                width: 200,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            }, function (error, canvas) {
+                if (error) {
+                    console.error('QR Code generation error:', error);
+                    alert('Error generating QR code');
+                    return;
+                }
+                
+                // Display QR code
+                const qrDisplay = document.getElementById('qrDisplay');
+                qrDisplay.innerHTML = '';
+                qrDisplay.appendChild(canvas);
+                
+                // Store for download
+                currentQRCanvas = canvas;
+                currentQRData = qrData;
+                
+                // Show success message
+                showNotification('QR Code generated successfully!', 'success');
+            });
+        }
+        
+        function downloadDemoQR() {
+            if (!currentQRCanvas) {
+                alert('Please generate a QR code first');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = `demo-attendance-qr-${currentQRData.course}-${currentQRData.date}.png`;
+            link.href = currentQRCanvas.toDataURL();
+            link.click();
+        }
+        
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            if (type === 'success') {
+                notification.style.backgroundColor = '#4caf50';
+            } else if (type === 'error') {
+                notification.style.backgroundColor = '#f44336';
+            } else {
+                notification.style.backgroundColor = '#2196f3';
+            }
+            
+            notification.textContent = message;
+            
+            // Add to page
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
