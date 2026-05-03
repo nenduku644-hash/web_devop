@@ -1,0 +1,11 @@
+flask
+yfinance
+tensorflow
+pandas
+numpy
+scikit-learn
+matplotlib
+fpdf
+requests
+lxml
+html5lib

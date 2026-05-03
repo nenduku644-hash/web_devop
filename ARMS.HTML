@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --dark-color: #5a5c69;
+            --light-color: #f8f9fc;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--light-color);
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        
+        .sidebar {
+            background-color: var(--primary-color);
+            min-height: 100vh;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 15px 20px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .attendance-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        
+        .attendance-progress {
+            height: 100%;
+            border-radius: 5px;
+            background-color: var(--secondary-color);
+        }
+        
+        .financial-record {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .password-toggle {
+            cursor: pointer;
+        }
+        
+        .remember-me {
+            margin-top: 15px;
+        }
+        
+        .forgot-password {
+            margin-top: 15px;
+            text-align: right;
+        }
+        
+        .main-content {
+            display: none;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .attendance-subnav {
+            margin-bottom: 20px;
+        }
+        
+        .attendance-subnav .nav-link {
+            color: var(--dark-color);
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        
+        .attendance-subnav .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .course-card {
+            margin-bottom: 15px;
+        }
+        
+        .course-name {
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        
+        .feedback-stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+        
+        .attendance-report-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .request-form label {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .examination-card {
+            transition: all 0.3s;
+        }
+        
+        .examination-card:hover {
+            background-color: rgba(78, 115, 223, 0.05);
+        }
+        
+        .mark-badge {
+            font-size: 1.2rem;
+            padding: 5px 10px;
+        }
+        
+        .no-due-badge {
+            background-color: var(--secondary-color);
+        }
+        
+        .revaluation-badge {
+            background-color: #f6c23e;
+        }
+        
+        .profile-info {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .profile-info-label {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .profile-info-value {
+            color: var(--primary-color);
+        }
+        
+        .logout-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <h2 class="text-center mb-4">Student Portal</h2>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input type="text" class="form-control" id="username" placeholder="Enter your username">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                <span class="input-group-text password-toggle" id="togglePassword"><i class="bi bi-eye"></i></span>
+            </div>
+        </div>
+        <div class="form-check remember-me">
+            <input class="form-check-input" type="checkbox" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">
+                Remember me
+            </label>
+        </div>
+        <div class="d-grid gap-2 mt-3">
+            <button class="btn btn-primary" id="loginBtn">Login</button>
+        </div>
+        <div class="forgot-password">
+            <a href="#" class="text-decoration-none">Forgot password?</a>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div class="main-content" id="mainApp">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                    <div class="position-sticky pt-3">
+                        <div class="text-center mb-4">
+                            <img src="my_pic.jpg" class="rounded-circle mb-2" width="80" height="80" alt="Profile Picture">
+                            <h5 class="text-white">Kandukuri Jagan</h5>
+                            <p class="text-white-50 small">Student ID: 192472374</p>
+                        </div>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#" data-tab="home">
+                                    <i class="bi bi-house-door"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="courses">
+                                    <i class="bi bi-book"></i> My Courses
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="feedback">
+                                    <i class="bi bi-chat-square-text"></i> Course Feedback
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="attendance">
+                                    <i class="bi bi-calendar-check"></i> Attendance
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="assignments">
+                                    <i class="bi bi-file-earmark-text"></i> Assignments
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="examinations">
+                                    <i class="bi bi-clipboard-check"></i> Examinations
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="financial">
+                                    <i class="bi bi-cash-coin"></i> Financial Record
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-tab="profile">
+                                    <i class="bi bi-person-circle"></i> My Profile
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 content">
+                    <!-- Home Tab -->
+                    <div class="tab-content" id="home">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">Dashboard</h1>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <div class="btn-group me-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-lg-3 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-calendar-check text-primary" style="font-size: 2rem;"></i>
+                                        <h5 class="card-title mt-3">Attendance</h5>
+                                        <h2 class="mb-0">85%</h2>
+                                        <p class="text-muted">Overall Attendance</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-file-earmark-text text-success" style="font-size: 2rem;"></i>
+                                        <h5 class="card-title mt-3">Assignments</h5>
+                                        <h2 class="mb-0">4</h2>
+                                        <p class="text-muted">Pending Assignments</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-cash-coin text-warning" style="font-size: 2rem;"></i>
+                                        <h5 class="card-title mt-3">Financial</h5>
+                                        <h2 class="mb-0">Due</h2>
+                                        <p class="text-muted">Payment Required</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-chat-square-text text-info" style="font-size: 2rem;"></i>
+                                        <h5 class="card-title mt-3">Feedback</h5>
+                                        <h2 class="mb-0">3</h2>
+                                        <p class="text-muted">Pending Feedback</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="bi bi-calendar-event me-1"></i>
+                                        Upcoming Events
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Event</th>
+                                                        <th>Date</th>
+                                                        <th>Time</th>
+                                                        <th>Location</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Mathematics Exam</td>
+                                                        <td>2023-06-15</td>
+                                                        <td>10:00 AM</td>
+                                                        <td>Block A, Room 101</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Physics Lab</td>
+                                                        <td>2023-06-16</td>
+                                                        <td>2:00 PM</td>
+                                                        <td>Science Building, Lab 3</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>English Seminar</td>
+                                                        <td>2023-06-18</td>
+                                                        <td>11:00 AM</td>
+                                                        <td>Library Conference Hall</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="bi bi-bell me-1"></i>
+                                        Notifications
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h6 class="mb-1">Assignment Deadline</h6>
+                                                    <small>3 days ago</small>
+                                                </div>
+                                                <p class="mb-1">Physics assignment due in 3 days.</p>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h6 class="mb-1">Exam Schedule</h6>
+                                                    <small>1 week ago</small>
+                                                </div>
+                                                <p class="mb-1">New exam schedule has been updated.</p>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h6 class="mb-1">Financial Notice</h6>
+                                                    <small>2 weeks ago</small>
+                                                </div>
+                                                <p class="mb-1">Please check your financial record.</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- My Courses Tab -->
+                    <div class="tab-content" id="courses">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">My Courses</h1>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <div class="btn-group me-2">
+                                    <button type="button" class="btn btn-sm btn-outline-primary">View All</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary">Download Schedule</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card course-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Mathematics</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Professor: Dr. Smith</h6>
+                                        <p class="card-text">Advanced Calculus and Linear Algebra with applications to engineering problems.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">4 Credits</span>
+                                            <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card course-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Physics</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Professor: Dr. Johnson</h6>
+                                        <p class="card-text">Classical Mechanics, Electromagnetism, and Modern Physics principles.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">4 Credits</span>
+                                            <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card course-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Computer Science</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Professor: Dr. Williams</h6>
+                                        <p class="card-text">Data Structures, Algorithms, and Object-Oriented Programming.</p>
+                                        <div class="d-flex justify-content-between align-center">
+                                            <span class="badge bg-primary">3 Credits</span>
+                                            <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card course-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">English Literature</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">Professor: Dr. Brown</h6>
+                                        <p class="card-text">Analysis of major literary works and development of critical writing skills.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">3 Credits</span>
+                                            <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course Feedback Tab -->
+                    <div class="tab-content" id="feedback">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">Course Feedback</h1>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <button type="button" class="btn btn-sm btn-outline-primary">Submit New Feedback</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        Mathematics
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="feedback-stars mb-3">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star"></i>
+                                        </div>
+                                        <p>The professor explains complex concepts clearly and provides helpful examples. The pace of the course is appropriate for understanding advanced mathematical concepts.</p>
+                                        <small class="text-muted">Submitted on: 2023-05-20</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        Physics
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="feedback-stars mb-3">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star"></i>
+                                            <i class="bi bi-star"></i>
+                                        </div>
+                                        <p>The course material is comprehensive, but the professor could improve on explaining practical applications. The lab sessions are well-structured.</p>
+                                        <small class="text-muted">Submitted on: 2023-05-18</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        Computer Science
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="feedback-stars mb-3">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                        </div>
+                                        <p>Excellent course with practical programming assignments. The professor is very responsive to questions and provides timely feedback on assignments.</p>
+                                        <small class="text-muted">Submitted on: 2023-05-15</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        English Literature
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="feedback-stars mb-3">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star"></i>
+                                        </div>
+                                        <p>Interesting discussions and thought-provoking assignments. The professor encourages critical thinking and provides valuable insights into literary works.</p>
+                                        <small class="text-muted">Submitted on: 2023-05-10</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Tab -->
+                    <div class="tab-content" id="attendance">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">Attendance</h1>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <div class="btn-group me-2">
+                                    <button type="button" class="btn btn-sm btn-outline-primary">View All</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary">Download Report</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul class="nav nav-pills attendance-subnav" id="attendanceSubnav">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#" data-subtab="report">Attendance Report</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-subtab="request">Request OD</a>
+                            </li>
+                        </ul>
+
+                        <!-- Attendance Report Subtab -->
+                        <div class="tab-content" id="report">
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <i class="bi bi-calendar-check me-1"></i>
+                                            Attendance Summary
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered attendance-report-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Course</th>
+                                                            <th>Total Classes</th>
+                                                            <th>Attended</th>
+                                                            <th>Percentage</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Mathematics</td>
+                                                            <td>45</td>
+                                                            <td>38</td>
+                                                            <td>84.4%</td>
+                                                            <td><span class="badge bg-success">Good</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Physics</td>
+                                                            <td>42</td>
+                                                            <td>36</td>
+                                                            <td>85.7%</td>
+                                                            <td><span class="badge bg-success">Good</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Computer Science</td>
+                                                            <td>40</td>
+                                                            <td>35</td>
+                                                            <td>87.5%</td>
+                                                            <td><span class="badge bg-success">Good</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>English Literature</td>
+                                                            <td>38</td>
+                                                            <td>33</td>
+                                                            <td>86.8%</td>
+                                                            <td><span class="badge bg-success">Good</span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Request OD Subtab -->
+                        <div class="tab-content" id="request">
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <i class="bi bi-pencil-square me-1"></i>
+                                            Request for Official Duty (OD)
+                                        </div>
+                                        <div class="card-body">
+                                            <form class="request-form">
+                                                <div class="mb-3">
+                                                    <label for="odReason" class="form-label">Reason for OD</label>
+                                                    <select class="form-select" id="odReason" required>
+                                                        <option value="" selected disabled>Select reason</option>
+                                                        <option value="medical">Medical Emergency</option>
+                                                        <option value="personal">Personal Reasons</option>
+                                                        <option value="family">Family Function</option>
+                                                        <option value="other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="odDetails" class="form-label">Details</label>
+                                                    <textarea class="form-control" id="odDetails" rows="3" placeholder="Provide details about your OD request" required></textarea>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="startDate" class="form-label">Start Date</label>
+                                                        <input type="date" class="form-control" id="startDate" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="endDate" class="form-label">End Date</label>
+                                                        <input type="date" class="form-control" id="endDate" required>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="attachProof" class="form-label">Attach Proof (if applicable)</label>
+                                                    <input class="form-control" type="file" id="attachProof">
+                                                </div>
+                                                <div class="d-grid gap-2">
+                                                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assignments Tab -->
+                    <div class="tab-content" id="assignments">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">Assignments</h1>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <button type="button" class="btn btn-sm btn-outline-primary">View All</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span>Mathematics</span>
+                                        <span class="badge bg-warning">Due in 3 days</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Calculus Assignment</h5>
+                                        <p class="card-text">Solve problems on differential equations and vector calculus.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: 2023-06-18</small>
+                                            <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span>Physics</span>
+                                        <span class="badge bg-danger">Due tomorrow</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Electromagnetism Lab Report</h5>
+                                        <p class="card-text">Analyze experimental data and write a comprehensive lab report.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: 2023-06-15</small>
+                                            <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span>Computer Science</span>
+                                        <span class="badge bg-info">Due in 1 week</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Data Structures Project</h5>
+                                        <p class="card-text">Implement a sorting algorithm with performance analysis.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: 2023-06-22</small>
+                                            <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span>English Literature</span>
+                                        <span class="badge bg-secondary">Due in 2 weeks</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Critical Essay</h5>
+                                        <p class="card-text">Write a critical analysis of a selected literary work.</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: 2023-06-29</small>
+                                            <a href="#" class="btn btn-sm btn-primary">View Details</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Examinations Tab -->
+                    <div class="tab-content" id="examinations">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">Examinations</h1>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <button type="button" class="btn btn-sm btn-outline-primary">View All</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card examination-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Mathematics</h5>
+                                        <p class="card-text">Final Examination on Calculus and Linear Algebra</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">June 15, 2023</span>
+                                            <span class="badge bg-secondary">10:00 AM - 12:00 PM</span>
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="badge bg-info mark-badge">Internal Marks: 28/30</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card examination-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Physics</h5>
+                                        <p class="card-text">Midterm Examination on Mechanics and Electromagnetism</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">June 18, 2023</span>
+                                            <span class="badge bg-secondary">2:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="badge bg-info mark-badge">Internal Marks: 25/30</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card examination-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Computer Science</h5>
+                                        <p class="card-text">Practical Examination on Data Structures and Algorithms</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">June 20, 2023</span>
+                                            <span class="badge bg-secondary">9:00 AM - 11:00 AM</span>
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="badge bg-info mark-badge">Internal Marks: 27/30</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card examination-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">English Literature</h5>
+                                        <p class="card-text">Final Examination on Literary Analysis</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-primary">June 25, 2023</span>
+                                            <span class="badge bg-secondary">1:00 PM - 3:00 PM</span>
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="badge bg-info mark-badge">Internal Marks: 26/30</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        No Due Certificate
+                                    </div>
+                                    <div class="card-body">
+                                        <p>You have no dues pending. Your No Due Certificate is available for download.</p>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-primary">Download No Due Certificate</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="bi bi-arrow-repeat me-1"></i>
+                                        Revaluation Request
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Request for revaluation of your examination papers.</p>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-primary">Submit Revaluation Request</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div                    <!-- Financial Record Tab -->
+                    <div class="tab-content" id="financial">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">Financial Record</h1>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <button type="button" class="btn btn-sm btn-outline-primary">View All Transactions</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="bi bi-cash-coin me-1"></i>
+                                        Payment Summary
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <p>Total Annual Fee: <span class="financial-record">₹200,000</span></p>
+                                        <p>Paid: <span class="financial-record">₹150,000</span></p>
+                                        <p>Remaining: <span class="financial-record text-danger">₹50,000</span></p>
+                                        <div class="progress mt-3 mb-3">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+                                        </div>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-primary">Make Payment</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="bi bi-receipt me-1"></i>
+                                        Recent Transactions
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0">Tuition Fee</h6>
+                                                    <small class="text-muted">2023-03-15</small>
+                                                </div>
+                                                <span class="text-success">₹100,000</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0">Hostel Fee</h6>
+                                                    <small class="text-muted">2023-04-10</small>
+                                                </div>
+                                                <span class="text-success">₹50,000</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0">Library Fee</h6>
+                                                    <small class="text-muted">2023-05-05</small>
+                                                </div>
+                                                <span class="text-success">₹10,000</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0">Sports Fee</h6>
+                                                    <small class="text-muted">2023-05-20</small>
+                                                </div>
+                                                <span class="text-success">₹10,000</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0">Medical Fee</h6>
+                                                    <small class="text-muted">2023-06-01</small>
+                                                </div>
+                                                <span class="text-success">₹10,000</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Tab -->
+                    <div class="tab-content" id="profile">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h2">My Profile</h1>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <button type="button" class="btn btn-sm btn-outline-primary">Edit Profile</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-4">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <img src="my_pic.jpg" class="profile-image mb-3" alt="Profile Picture">
+                                        <h4 class="card-title">Kandukuri Jagan</h4>
+                                        <p class="card-text">Student ID: 192472374</p>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-sm btn-outline-primary">Change Picture</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="bi bi-person-vcard me-1"></i>
+                                        Personal Information
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="profile-info">
+                                            <div class="row">
+                                                <div class="col-md-4 profile-info-label">Full Name:</div>
+                                                <div class="col-md-8 profile-info-value">Kandukuri Jagan</div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info">
+                                            <div class="row">
+                                                <div class="col-md-4 profile-info-label">Email:</div>
+                                                <div class="col-md-8 profile-info-value">kandukurijagan99@gmail.com</div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info">
+                                            <div class="row">
+                                                <div class="col-md-4 profile-info-label">Date of Birth:</div>
+                                                <div class="col-md-8 profile-info-value">14/06/2006</div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info">
+                                            <div class="row">
+                                                <div class="col-md-4 profile-info-label">Address:</div>
+                                                <div class="col-md-8 profile-info-value">Balijapalem village, Varadaiah palem mandal, Tirupati district, Andhra Pradesh.</div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info">
+                                            <div class="row">
+                                                <div class="col-md-4 profile-info-label">Phone:</div>
+                                                <div class="col-md-8 profile-info-value">+91 9876543210</div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info">
+                                            <div class="row">
+                                                <div class="col-md-4 profile-info-label">Department:</div>
+                                                <div class="col-md-8 profile-info-value">Computer Science</div>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info">
+                                            <div class="row">
+                                                <div class="col-md-4 profile-info-label">Year of Study:</div>
+                                                <div class="col-md-8 profile-info-value">3rd Year</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="bi bi-shield-lock me-1"></i>
+                                        Account Settings
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="currentPassword" class="form-label">Current Password</label>
+                                                    <div class="input-group">
+                                                        <input type="password" class="form-control" id="currentPassword">
+                                                        <span class="input-group-text password-toggle" data-target="currentPassword"><i class="bi bi-eye"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="newPassword" class="form-label">New Password</label>
+                                                    <div class="input-group">
+                                                        <input type="password" class="form-control" id="newPassword">
+                                                        <span class="input-group-text password-toggle" data-target="newPassword"><i class="bi bi-eye"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                                    <div class="input-group">
+                                                        <input type="password" class="form-control" id="confirmPassword">
+                                                        <span class="input-group-text password-toggle" data-target="confirmPassword"><i class="bi bi-eye"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="securityQuestion" class="form-label">Security Question</label>
+                                                    <select class="form-select" id="securityQuestion">
+                                                        <option selected>What is your mother's maiden name?</option>
+                                                        <option>What was your first pet's name?</option>
+                                                        <option>What was the name of your elementary school?</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="securityAnswer" class="form-label">Security Answer</label>
+                                            <input type="text" class="form-control" id="securityAnswer">
+                                        </div>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-primary">Update Account</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <div class="logout-btn">
+            <button class="btn btn-danger" id="logoutBtn">
+                <i class="bi bi-box-arrow-right me-2"></i>Logout
+            </button>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Login functionality
+                const loginBtn = document.getElementById('loginBtn');
+                const usernameInput = document.getElementById('username');
+                const passwordInput = document.getElementById('password');
+                const loginPage = document.getElementById('loginPage');
+                const mainApp = document.getElementById('mainApp');
+                const togglePassword = document.getElementById('togglePassword');
+                const rememberMe = document.getElementById('rememberMe');
+                const logoutBtn = document.getElementById('logoutBtn');
+                
+                // Password visibility toggle
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.querySelector('i').classList.toggle('bi-eye');
+                    this.querySelector('i').classList.toggle('bi-eye-slash');
+                });
+                
+                // Password toggle for profile page
+                document.querySelectorAll('.password-toggle[data-target]').forEach(toggle => {
+                    toggle.addEventListener('click', function() {
+                        const targetId = this.getAttribute('data-target');
+                        const targetInput = document.getElementById(targetId);
+                        const type = targetInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        targetInput.setAttribute('type', type);
+                        this.querySelector('i').classList.toggle('bi-eye');
+                        this.querySelector('i').classList.toggle('bi-eye-slash');
+                    });
+                });
+                
+                // Login button click
+                loginBtn.addEventListener('click', function() {
+                    const username = usernameInput.value;
+                    const password = passwordInput.value;
+                    
+                    if (username === '192472374' && password === '123') {
+                        loginPage.style.display = 'none';
+                        mainApp.style.display = 'block';
+                    } else {
+                        // Show error message
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert alert-danger alert-dismissible fade show mt-3';
+                        alertDiv.innerHTML = `
+                            Invalid username or password. Please try again.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        `;
+                        loginPage.appendChild(alertDiv);
+                        
+                        // Auto dismiss after 3 seconds
+                        setTimeout(() => {
+                            alertDiv.remove();
+                        }, 3000);
+                    }
+                });
+                
+                // Logout button click
+                logoutBtn.addEventListener('click', function() {
+                    mainApp.style.display = 'none';
+                    loginPage.style.display = 'block';
+                    usernameInput.value = '';
+                    passwordInput.value = '';
+                });
+                
+                // Tab navigation
+                const navLinks = document.querySelectorAll('.sidebar .nav-link');
+                const tabContents = document.querySelectorAll('.tab-content');
+                
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // Remove active class from all links and tabs
+                        navLinks.forEach(navLink => navLink.classList.remove('active'));
+                        tabContents.forEach(tabContent => tabContent.classList.remove('active'));
+                        
+                        // Add active class to clicked link
+                        this.classList.add('active');
+                        
+                        // Show corresponding tab
+                        const tabId = this.getAttribute('data-tab');
+                        document.getElementById(tabId).classList.add('active');
+                    });
+                });
+                
+                // Attendance subtab navigation
+                const attendanceSubnavLinks = document.querySelectorAll('#attendanceSubnav .nav-link');
+                const attendanceSubtabs = document.querySelectorAll('#attendance .tab-content');
+                
+                attendanceSubnavLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // Remove active class from all links and subtabs
+                        attendanceSubnavLinks.forEach(subNavLink => subNavLink.classList.remove('active'));
+                        attendanceSubtabs.forEach(subTab => subTab.classList.remove('active'));
+                        
+                        // Add active class to clicked link
+                        this.classList.add('active');
+                        
+                        // Show corresponding subtab
+                        const subtabId = this.getAttribute('data-subtab');
+                        document.getElementById(subtabId).classList.add('active');
+                    });
+                });
+                
+                // Auto login if remember me was checked
+                if (rememberMe.checked) {
+                    loginBtn.click();
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

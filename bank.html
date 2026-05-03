@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemazon - Online Shopping</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-link {
+            @apply text-white hover:border-white hover:border px-2 py-1 rounded-sm text-sm;
+        }
+        .category-link {
+             @apply text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="bg-gray-800 text-white">
+        <!-- Top Navigation -->
+        <div class="container mx-auto px-4 py-2 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="text-2xl font-bold">Gemazon</a>
+
+            <!-- Search Bar -->
+            <div class="flex-grow mx-4">
+                <div class="flex rounded-md overflow-hidden">
+                    <input type="text" class="w-full p-2 text-gray-900" placeholder="Search Gemazon.in">
+                    <button class="bg-yellow-500 text-white px-4 hover:bg-yellow-600">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Side Links -->
+            <div class="flex items-center space-x-4">
+                <a href="#" class="nav-link">
+                    <span class="text-xs">Hello, Sign in</span><br>
+                    <span class="font-bold">Account & Lists</span>
+                </a>
+                <a href="#" class="nav-link">
+                    <span class="text-xs">Returns</span><br>
+                    <span class="font-bold">& Orders</span>
+                </a>
+                <a href="#" class="nav-link flex items-center">
+                    <i class="fa fa-shopping-cart text-2xl mr-1"></i>
+                    <span class="font-bold">Cart</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bg-gray-700">
+            <div class="container mx-auto px-4 py-1 flex items-center space-x-4">
+                <a href="#" class="nav-link"><i class="fa fa-bars mr-1"></i> All</a>
+                <a href="#" class="nav-link">Today's Deals</a>
+                <a href="#" class="nav-link">Customer Service</a>
+                <a href="#" class="nav-link">Gift Cards</a>
+                <a href="#" class="nav-link">Registry</a>
+                <a href="#" class="nav-link">Sell</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8 text-center">
+            <h1 class="text-4xl font-bold mb-4">Welcome to Gemazon</h1>
+            <p class="text-lg text-gray-600">Your one-stop shop for everything you need.</p>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <!-- Product Card 1 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img src="https://placehold.co/400x300/EBF4FF/737373?text=Product+Image" alt="Product Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2">High-Performance Laptop</h3>
+                    <div class="flex items-center mb-2">
+                        <div class="text-yellow-500">
+                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-alt"></i>
+                        </div>
+                        <span class="text-gray-600 ml-2">(1,250)</span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900">$1299.99</p>
+                    <button class="w-full mt-4 bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Product Card 2 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img src="https://placehold.co/400x300/EBF4FF/737373?text=Product+Image" alt="Product Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2">Wireless Noise-Cancelling Headphones</h3>
+                    <div class="flex items-center mb-2">
+                        <div class="text-yellow-500">
+                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                        </div>
+                        <span class="text-gray-600 ml-2">(3,482)</span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900">$349.99</p>
+                    <button class="w-full mt-4 bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Product Card 3 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img src="https://placehold.co/400x300/EBF4FF/737373?text=Product+Image" alt="Product Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2">Smartwatch with Fitness Tracker</h3>
+                    <div class="flex items-center mb-2">
+                        <div class="text-yellow-500">
+                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="far fa-star"></i>
+                        </div>
+                        <span class="text-gray-600 ml-2">(890)</span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900">$199.99</p>
+                    <button class="w-full mt-4 bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600">Add to Cart</button>
+                </div>
+            </div>
+            <!-- Product Card 4 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img src="https://placehold.co/400x300/EBF4FF/737373?text=Product+Image" alt="Product Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-2">4K Ultra HD Smart TV</h3>
+                    <div class="flex items-center mb-2">
+                        <div class="text-yellow-500">
+                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-alt"></i>
+                        </div>
+                        <span class="text-gray-600 ml-2">(2,115)</span>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900">$799.99</p>
+                    <button class="w-full mt-4 bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-8">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold mb-4">Get to Know Us</h3>
+                    <ul>
+                        <li><a href="#" class="hover:underline">About Us</a></li>
+                        <li><a href="#" class="hover:underline">Careers</a></li>
+                        <li><a href="#" class="hover:underline">Press Releases</a></li>
+                        <li><a href="#" class="hover:underline">Gemazon Science</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Connect with Us</h3>
+                    <ul>
+                        <li><a href="#" class="hover:underline">Facebook</a></li>
+                        <li><a href="#" class="hover:underline">Twitter</a></li>
+                        <li><a href="#" class="hover:underline">Instagram</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Make Money with Us</h3>
+                    <ul>
+                        <li><a href="#" class="hover:underline">Sell on Gemazon</a></li>
+                        <li><a href="#" class="hover:underline">Sell under Gemazon Accelerator</a></li>
+                        <li><a href="#" class="hover:underline">Become an Affiliate</a></li>
+                        <li><a href="#" class="hover:underline">Advertise Your Products</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Let Us Help You</h3>
+                    <ul>
+                        <li><a href="#" class="hover:underline">COVID-19 and Gemazon</a></li>
+                        <li><a href="#" class="hover:underline">Your Account</a></li>
+                        <li><a href="#" class="hover:underline">Returns Centre</a></li>
+                        <li><a href="#" class="hover:underline">Help</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center mt-8 border-t border-gray-700 pt-4">
+                <p>&copy; 2024, Gemazon.com, Inc. or its affiliates</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Colorful HTML Xylophone</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg: #0e0f14;
+      --fg: #e7e7e7;
+      --shadow: rgba(0,0,0,.25);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; background: radial-gradient(circle at 20% 20%, #1a1f2b 0%, #0e0f14 30%, #0e0f14 100%), var(--bg); color: var(--fg); font-family: system-ui, -apple-system, "Segoe UI", Roboto; }
+    .container {
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+    h1 { margin: 0 0 8px; font-size: 1.6rem; text-align: center; }
+    p.instructions { text-align: center; color: #d0d0d0; margin: 0 0 16px; }
+    .keyboard {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      align-items: end;
+      justify-items: center;
+      perspective: 1000px;
+    }
+
+    /* Key styling */
+    .key {
+      width: 100%;
+      height: 180px;
+      border-radius: 10px 10px 6px 6px;
+      background: linear-gradient(#fff, #ddd);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      position: relative;
+      box-shadow: inset 0 -8px 0 rgba(0,0,0,.04), 0 6px 12px rgba(0,0,0,.25);
+      user-select: none;
+      cursor: pointer;
+      transition: transform .05s ease, filter .2s ease;
+      color: #1a1a1a;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+    .key:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .key.active {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: inset 0 -4px 0 rgba(0,0,0,.08), 0 10px 14px rgba(0,0,0,.35);
+    }
+
+    /* Colorful fronts for keys, tuned for pleasant palette */
+    .k-1  { background: linear-gradient(#ffd0a3, #ff8a00); }
+    .k-2  { background: linear-gradient(#ffd6e8, #ff3b9b); }
+    .k-3  { background: linear-gradient(#d6f5a2, #4caf50); }
+    .k-4  { background: linear-gradient(#b8e8ff, #2196f3); }
+    .k-5  { background: linear-gradient(#e3d4ff, #7b5dde); }
+    .k-6  { background: linear-gradient(#ffd6a5, #f57c00); }
+    .k-7  { background: linear-gradient(#c7f4ff, #29b6f6); }
+    .k-8  { background: linear-gradient(#ffd6e0, #e91e63); }
+
+    .label {
+      font-size: 14px;
+      padding: 8px 10px;
+      background: rgba(255,255,255,.75);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      color: #333;
+      box-shadow: 0 2px 6px rgba(0,0,0,.15);
+      user-select: none;
+    }
+
+    /* Keyboard row layout to look roomy on wide screens */
+    @media (min-width: 900px) {
+      .keyboard { grid-template-columns: repeat(8, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .keyboard { grid-template-columns: repeat(4, 1fr); }
+      .key { height: 140px; }
+    }
+
+    /* Accessibility: focus ring */
+    .key:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <main class="container" aria-label="Xylophone playground">
+    <h1>Colorful HTML Xylophone with Web Audio</h1>
+    <p class="instructions">
+      Click or press keys (1–8) to play notes. Visual feedback shows struck keys. This uses the Web Audio API to synthesize tones with frequency-based envelopes.
+    </p>
+
+    <section class="keyboard" id="keyboard" aria-label="Xylophone keys">
+      <!-- 8 colorful keys -->
+      <button class="key k-1" data-note="261.63" aria-label="C4 (261.63 Hz)" tabindex="0"><span class="label">C4</span></button>
+      <button class="key k-2" data-note="293.66" aria-label="D4 (293.66 Hz)" tabindex="0"><span class="label">D4</span></button>
+      <button class="key k-3" data-note="329.63" aria-label="E4 (329.63 Hz)" tabindex="0"><span class="label">E4</span></button>
+      <button class="key k-4" data-note="349.23" aria-label="F4 (349.23 Hz)" tabindex="0"><span class="label">F4</span></button>
+      <button class="key k-5" data-note="392.00" aria-label="G4 (392 Hz)" tabindex="0"><span class="label">G4</span></button>
+      <button class="key k-6" data-note="440.00" aria-label="A4 (440 Hz)" tabindex="0"><span class="label">A4</span></button>
+      <button class="key k-7" data-note="493.88" aria-label="B4 (493.88 Hz)" tabindex="0"><span class="label">B4</span></button>
+      <button class="key k-8" data-note="523.25" aria-label="C5 (523.25 Hz)" tabindex="0"><span class="label">C5</span></button>
+    </section>
+
+    <section aria-label="Usage notes" style="margin-top:16px;">
+      <h2 style="font-size:1.15rem; margin:12px 0 6px;">How it works</h2>
+      <ul>
+        <li><strong>Sound</strong>: Each key plays a sine-like tone with a short envelope to resemble a xylophone note.</li>
+        <li><strong>Feedback</strong>: The pressed key gains an active visual state for immediate feedback.</li>
+        <li><strong>Interactivity</strong>: You can also use the number keys 1–8 to trigger notes.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // Lightweight xylophone using Web Audio API
+    (function() {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioCtx();
+
+      // Simple touch/click friendly start (some browsers require user gesture)
+      let started = false;
+      function ensureContext() {
+        if (!started) {
+          // Resume context after a user gesture
+          ctx.resume().then(() => { started = true; });
+        }
+      }
+
+      // Create a short piano-like pluck using an oscillator with a slight decay
+      function playNote(freq, duration = 0.5, type = 'sine', gainVal = 0.25) {
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        osc.type = type;
+        osc.frequency.value = freq;
+
+        // Amplitude envelope: quick attack, short decay
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.0, now);
+        gain.gain.linearRampToValueAtTime(gainVal, now + 0.01); // quick attack
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration); // decay
+
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration + 0.05);
+        // Clean up after stop
+        osc.onended = () => {
+          osc.disconnect();
+          gain.disconnect();
+        };
+      }
+
+      // Visual feedback: activate key briefly
+      function flashKey(el) {
+        el.classList.add('active');
+        // revert after short time
+        window.setTimeout(() => el.classList.remove('active'), 120);
+      }
+
+      // Map keyboard inputs to keys
+      const keyMap = ['1','2','3','4','5','6','7','8'];
+      const keys = Array.from(document.querySelectorAll('.key'));
+
+      // Attach event listeners for pointer interactions
+      keys.forEach((el, idx) => {
+        const freq = parseFloat(el.getAttribute('data-note'));
+        el.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          ensureContext();
+          playNote(freq, 0.55, 'triangle', 0.25);
+          flashKey(el);
+        });
+        el.addEventListener('touchstart', (e) => {
+          ensureContext();
+          playNote(freq, 0.55, 'triangle', 0.25);
+          flashKey(el);
+        }, {passive: true});
+        // Keyboard focus activation
+        el.addEventListener('click', () => {
+          ensureContext();
+          playNote(freq, 0.55, 'triangle', 0.25);
+          flashKey(el);
+        });
+      });
+
+      // Global keybindings: 1-8
+      window.addEventListener('keydown', (e) => {
+        const idx = keyMap.indexOf(e.key);
+        if (idx >= 0) {
+          const el = keys[idx];
+          const freq = parseFloat(el.getAttribute('data-note'));
+          ensureContext();
+          playNote(freq, 0.55, 'triangle', 0.25);
+          flashKey(el);
+        }
+      });
+
+      // Optional: handle visibility change to suspend context and save energy
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          // no automatic suspension here to avoid muting after user interaction
+        }
+      });
+
+      // Initialize: wait for user gesture to resume context
+      // This ensures compatibility with some browsers
+      window.addEventListener('click', () => {
+        if (!started) {
+          ctx.resume().then(() => { started = true; });
+        }
+      }, {once: true});
+    })();
+  </script>
+</body>
+</html>

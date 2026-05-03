@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 300px;
+      margin: 100px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #4cae4c;
+    }
+    nav {
+      background-color: #007bff;
+      padding: 10px;
+      color: white;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+    .content {
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Container -->
+  <div class="container" id="loginContainer">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- Main Content -->
+  <div id="mainContent" style="display:none;">
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#myCourses">My Courses</a>
+      <a href="#feedback">My Course Feedback</a>
+      <a href="#attendance">Attendance</a>
+      <a href="#assignments">Assignments</a>
+      <a href="#exams">Examinations</a>
+      <a href="#financials">Financial Records</a>
+      <a href="#profile">My Profile</a>
+    </nav>
+    <div class="content">
+      <h1>Welcome, Kandukuri Jagan!</h1>
+      <p>Your attendance percentage: 85%</p>
+      <p>Financial Record: ₹200,000 to be paid for this year.</p>
+      <img src="your_picture.jpg" alt="Profile Picture" width="100">
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (username === '192472374' && password === '123') {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        setTimeout(logout, 60000); // Auto logout after 1 minute
+      } else {
+        alert('Invalid credentials');
+      }
+    }
+
+    function logout() {
+      alert('You have been logged out due to inactivity.');
+      location.reload(); // Reset to login screen
+    }
+  </script>
+
+</body>
+</html>

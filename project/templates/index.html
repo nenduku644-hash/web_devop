@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Prediction Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Price Prediction & Analytics Platform</h1>
+        <div class="form-group">
+            <label for="sector">Select Sector:</label>
+            <select id="sector">
+                <option value="">-- Select Sector --</option>
+                {% for sector in sectors %}
+                <option value="{{ sector }}">{{ sector }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="stock">Select Stock:</label>
+            <select id="stock" disabled>
+                <option value="">-- Select Stock --</option>
+            </select>
+        </div>
+        <button id="predict-btn" disabled>Predict</button>
+        <button id="export-btn" disabled>Export PDF</button>
+        
+        <div id="results" style="display: none;">
+            <h2>Analytics</h2>
+            <div class="analytics">
+                <div class="section">
+                    <h3>Past Analysis</h3>
+                    <p><strong>Long-term Trend:</strong> <span id="long-term-trend"></span></p>
+                    <p><strong>Historical Average:</strong> $<span id="hist-avg"></span></p>
+                    <p><strong>Volatility:</strong> $<span id="volatility"></span></p>
+                </div>
+                <div class="section">
+                    <h3>Present Analysis</h3>
+                    <p><strong>Current Price:</strong> $<span id="current-price"></span></p>
+                    <p><strong>Recent Movement:</strong> <span id="recent-movement"></span>%</p>
+                </div>
+                <div class="section">
+                    <h3>Future Prediction</h3>
+                    <p><strong>Predicted Price:</strong> $<span id="predicted-price"></span></p>
+                    <p><strong>Direction:</strong> <span id="direction"></span></p>
+                </div>
+                <div class="section">
+                    <h3>Accuracy Metrics</h3>
+                    <p><strong>RMSE:</strong> <span id="rmse"></span></p>
+                    <p><strong>MAE:</strong> <span id="mae"></span></p>
+                </div>
+            </div>
+            <canvas id="priceChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const stockSectors = {{ stock_sectors|safe }};
+        const sectorSelect = document.getElementById('sector');
+        const stockSelect = document.getElementById('stock');
+        const predictBtn = document.getElementById('predict-btn');
+        const exportBtn = document.getElementById('export-btn');
+        const resultsDiv = document.getElementById('results');
+        let chart;
+
+        sectorSelect.addEventListener('change', function() {
+            const selectedSector = this.value;
+            stockSelect.innerHTML = '<option value="">-- Select Stock --</option>';
+            if (selectedSector) {
+                const stocks = Object.keys(stockSectors).filter(stock => stockSectors[stock] === selectedSector);
+                stocks.forEach(stock => {
+                    const option = document.createElement('option');
+                    option.value = stock;
+                    option.textContent = stock;
+                    stockSelect.appendChild(option);
+                });
+                stockSelect.disabled = false;
+            } else {
+                stockSelect.disabled = true;
+                predictBtn.disabled = true;
+            }
+        });
+
+        stockSelect.addEventListener('change', function() {
+            predictBtn.disabled = !this.value;
+        });
+
+        predictBtn.addEventListener('click', async function() {
+            const stock = stockSelect.value;
+            if (!stock) return;
+            
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ stock })
+            });
+            const data = await response.json();
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            
+            // Update analytics
+            document.getElementById('long-term-trend').textContent = data.long_term_trend;
+            document.getElementById('hist-avg').textContent = data.hist_avg;
+            document.getElementById('volatility').textContent = data.volatility;
+            document.getElementById('current-price').textContent = data.current_price;
+            document.getElementById('recent-movement').textContent = data.recent_movement;
+            document.getElementById('predicted-price').textContent = data.predicted_price;
+            document.getElementById('direction').textContent = data.direction;
+            document.getElementById('rmse').textContent = data.rmse;
+            document.getElementById('mae').textContent = data.mae;
+            
+            // Update chart
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            if (chart) chart.destroy();
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.dates,
+                    datasets: [{
+                        label: 'Close Price',
+                        data: data.chart_data,
+                        borderColor: 'blue',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { display: true },
+                        y: { display: true }
+                    }
+                }
+            });
+            
+            resultsDiv.style.display = 'block';
+            exportBtn.disabled = false;
+        });
+
+        exportBtn.addEventListener('click', async function() {
+            const stock = stockSelect.value;
+            const data = {
+                stock,
+                current_price: document.getElementById('current-price').textContent,
+                predicted_price: document.getElementById('predicted-price').textContent,
+                direction: document.getElementById('direction').textContent,
+                hist_avg: document.getElementById('hist-avg').textContent,
+                volatility: document.getElementById('volatility').textContent,
+                long_term_trend: document.getElementById('long-term-trend').textContent,
+                recent_movement: document.getElementById('recent-movement').textContent,
+                rmse: document.getElementById('rmse').textContent,
+                mae: document.getElementById('mae').textContent
+            };
+            
+            const response = await fetch('/export_pdf', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${stock}_report.pdf`;
+                a.click();
+            }
+        });
+    </script>
+</body>
+</html>

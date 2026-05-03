@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Registration Form</title>
+</head>
+<body>
+
+  <h1 align="center">Student Registration Form</h1>
+
+  <form action="submit.html" method="post">
+    <table border="1" align="center" cellpadding="10">
+
+      <tr>
+        <td>First Name:</td>
+        <td><input type="text" name="firstname" required></td>
+      </tr>
+
+      <tr>
+        <td>Last Name:</td>
+        <td><input type="text" name="lastname" required></td>
+      </tr>
+
+      <tr>
+        <td>Gender:</td>
+        <td>
+          <input type="radio" name="gender" value="male"> Male
+          <input type="radio" name="gender" value="female"> Female
+        </td>
+      </tr>
+
+      <tr>
+        <td>Date of Birth:</td>
+        <td><input type="date" name="dob"></td>
+      </tr>
+
+      <tr>
+        <td>Email:</td>
+        <td><input type="email" name="email" required></td>
+      </tr>
+
+      <tr>
+        <td>Mobile Number:</td>
+        <td><input type="text" name="mobile" maxlength="10"></td>
+      </tr>
+
+      <tr>
+        <td>Department:</td>
+        <td>
+          <select name="department">
+            <option>Select Department</option>
+            <option>Computer Science</option>
+            <option>Electronics</option>
+            <option>Mechanical</option>
+            <option>Civil</option>
+          </select>
+        </td>
+      </tr>
+
+      <tr>
+        <td>Address:</td>
+        <td><textarea name="address" rows="4" cols="40"></textarea></td>
+      </tr>
+
+      <tr>
+        <td>Languages Known:</td>
+        <td>
+          <input type="checkbox" name="lang" value="English"> English
+          <input type="checkbox" name="lang" value="Telugu"> Telugu
+          <input type="checkbox" name="lang" value="Hindi"> Hindi
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" align="center">
+          <input type="submit" value="Register">
+          <input type="reset" value="Clear">
+        </td>
+      </tr>
+
+    </table>
+  </form>
+
+</body>
+</html>

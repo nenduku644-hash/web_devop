@@ -1,11 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Portal</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    .container { padding: 20px; }
+    nav { background: #333; padding: 10px; }
+    nav a { color: white; margin: 0 10px; text-decoration: none; }
+    .tab-content { display: none; padding: 20px; }
+    .active { display: block; }
+    .profile-pic { width: 100px; height: 100px; border-radius: 50%; }
+  </style>
 </head>
 <body>
-    
+<div id="loginPage" class="container">
+  <h2>Login</h2>
+  <label for="username">Username:</label>
+  <input type="text" id="username" /><br /><br />
+  <label for="password">Password:</label>
+  <input type="password" id="password" /><br /><br />
+  <input type="checkbox" id="savePassword"> Save Password<br><br>
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="mainPage" class="container" style="display:none">
+  <nav>
+    <a href="#" onclick="showTab('home')">Home</a>
+    <a href="#" onclick="showTab('myCourse')">My Course</a>
+    <a href="#" onclick="showTab('feedback')">My Course Feedback</a>
+    <a href="#" onclick="showTab('attendance')">Attendance</a>
+    <a href="#" onclick="showTab('assignment')">Assignment</a>
+    <a href="#" onclick="showTab('examination')">Examination</a>
+    <a href="#" onclick="showTab('finance')">Financial Record</a>
+    <a href="#" onclick="showTab('profile')">My Profile</a>
+  </nav>
+  <div id="home" class="tab-content active">
+    <h3>Welcome to Student Portal</h3>
+  </div>
+  <div id="myCourse" class="tab-content">
+    <h3>My Course</h3>
+    <p>Details of enrolled courses</p>
+  </div>
+  <div id="feedback" class="tab-content">
+    <h3>My Course Feedback</h3>
+    <p>Provide feedback for your courses here</p>
+  </div>
+  <div id="attendance" class="tab-content">
+    <h3>Attendance</h3>
+    <ul>
+      <li>Attendance Report: 85%</li>
+      <li>Request OD: [Request Form]</li>
+    </ul>
+  </div>
+  <div id="assignment" class="tab-content">
+    <h3>Assignments</h3>
+    <p>Assignment details will be displayed here</p>
+  </div>
+  <div id="examination" class="tab-content">
+    <h3>Examination</h3>
+    <ul>
+      <li>Internal Marks: [Details]</li>
+      <li>No Due: [Status]</li>
+      <li>Revaluation: [Apply Form]</li>
+    </ul>
+  </div>
+  <div id="finance" class="tab-content">
+    <h3>Financial Record</h3>
+    <p>₹2,00,000 to be paid for this year</p>
+  </div>
+  <div id="profile" class="tab-content">
+    <h3>My Profile</h3>
+    <img src="https://via.placeholder.com/100" alt="Profile Picture" class="profile-pic"/>
+    <p>Name: Kandukuri Jagan</p>
+    <p>Email: kandukurijagan99@gmail.com</p>
+    <p>DOB: 14/06/2006</p>
+    <p>Address: Balijapalem Village, Varadaiah Palem Mandal, Tirupati District, Andhra Pradesh</p>
+  </div>
+</div>
+
+<script>
+  const VALID_USER = "192472374";
+  const VALID_PASS = "123";
+  let logoutTimer;
+
+  function login() {
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+    if (user === VALID_USER && pass === VALID_PASS) {
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("mainPage").style.display = "block";
+      logoutTimer = setTimeout(logout, 60000); // 1-minute auto logout
+    } else {
+      alert("Invalid login credentials");
+    }
+  }
+
+  function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  function logout() {
+    alert("Session timed out. Logging out.");
+    location.reload();
+  }
+</script>
 </body>
 </html>

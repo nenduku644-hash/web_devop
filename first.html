@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Student Registration Form</title>
+</head>
+<body>
+    <h2>Student Registration Form</h2>
+<form action="submit.php" method="post">
+        <label for="name">Name:</label><br />
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required /><br /><br />
+
+        <label for="email">Email:</label><br />
+        <input type="email" id="email" name="email" placeholder="Enter your email address" required /><br /><br />
+
+        <label for="password">Password:</label><br />
+        <input type="password" id="password" name="password" placeholder="Create a password" required /><br /><br />
+
+        <label for="age">Age:</label><br />
+        <input type="number" id="age" name="age" min="1" max="120" placeholder="Enter your age" required /><br /><br />
+
+        <label>Gender:</label><br />
+        <input type="radio" id="male" name="gender" value="Male" required />
+        <label for="male">Male</label><br />
+        <input type="radio" id="female" name="gender" value="Female" />
+        <label for="female">Female</label><br />
+        <input type="radio" id="other" name="gender" value="Other" />
+        <label for="other">Other</label><br /><br />
+
+        <label>Interests:</label><br />
+        <input type="checkbox" id="sports" name="interests" value="Sports" />
+        <label for="sports">Sports</label><br />
+        <input type="checkbox" id="music" name="interests" value="Music" />
+        <label for="music">Music</label><br />
+        <input type="checkbox" id="reading" name="interests" value="Reading" />
+        <label for="reading">Reading</label><br /><br />
+
+        <label for="department">Department:</label><br />
+        <select id="department" name="department" required>
+            <option value="">Select your department</option>
+            <option value="CSE">Computer Science</option>
+            <option value="EEE">Electrical Engineering</option>
+            <option value="ECE">Electronics and Communication</option>
+            <option value="ME">Mechanical Engineering</option>
+        </select><br /><br />
+
+        <label for="comments">Additional Comments:</label><br />
+        <textarea id="comments" name="comments" rows="4" cols="30" placeholder="Write your comments here..."></textarea><br /><br />
+
+        <input type="submit" value="Submit" />
+        <input type="reset" value="Reset" />
+    </form>
+</body>
+</html>

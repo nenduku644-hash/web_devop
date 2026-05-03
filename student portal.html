@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #5085C6;
+            color: white;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: 3px solid #3D56B2;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            overflow: hidden;
+        }
+        header li {
+            float: left;
+            display: inline;
+            padding: 0 20px 0 20px;
+        }
+        header #branding {
+            float: left;
+        }
+        header #branding h1 {
+            margin: 0;
+        }
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+        header .highlight, header .current a {
+            color: #e8491d;
+            font-weight: bold;
+        }
+        .login-container {
+            width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .login-container h2 {
+            text-align: center;
+            color: #333;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .login-container button {
+            background-color: #5085C6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .login-container button:hover {
+            background-color: #3D56B2;
+        }
+        #main-page {
+            display: none;
+            padding: 20px;
+        }
+        #main-page nav {
+            background: #333;
+            color: white;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        #main-page nav ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        #main-page nav li {
+            display: inline;
+            margin-right: 20px;
+        }
+        #main-page nav a {
+            color: white;
+            text-decoration: none;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            background-color: #fff;
+        }
+        .tab-content h3 {
+            color: #333;
+        }
+        .active {
+            display: block;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+        }
+        .profile-info img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .attendance-report {
+            margin-top: 20px;
+        }
+        .attendance-report table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .attendance-report th, .attendance-report td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .attendance-report th {
+            background-color: #f2f2f2;
+        }
+        .financial-record {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .financial-record h4 {
+            color: #333;
+        }
+        /* Responsive Design */
+        @media(max-width: 768px) {
+            header #branding,
+            header nav {
+                float: none;
+                text-align: center;
+            }
+            header nav li {
+                float: none;
+                display: block;
+            }
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>My Website</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li class="current"><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="login-container" id="login-page">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="main-page" style="display:none;">
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showTab('home')">Home</a></li>
+                <li><a href="#" onclick="showTab('myCourse')">My Course</a></li>
+                <li><a href="#" onclick="showTab('myCourseFeedback')">My Course Feedback</a></li>
+                <li><a href="#" onclick="showTab('attendance')">Attendance</a></li>
+                <li><a href="#" onclick="showTab('assignment')">Assignment</a></li>
+                <li><a href="#" onclick="showTab('examination')">Examination</a></li>
+                <li><a href="#" onclick="showTab('financialRecord')">Financial Record</a></li>
+                <li><a href="#" onclick="showTab('myProfile')">My Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+
+        <div id="home" class="tab-content active">
+            <h3>Home</h3>
+            <p>Welcome to the main page!</p>
+        </div>
+
+        <div id="myCourse" class="tab-content">
+            <h3>My Course</h3>
+            <p>Details about your course.</p>
+        </div>
+
+        <div id="myCourseFeedback" class="tab-content">
+            <h3>My Course Feedback</h3>
+            <p>Provide feedback for your course.</p>
+        </div>
+
+        <div id="attendance" class="tab-content">
+            <h3>Attendance</h3>
+            <a href="#" onclick="showSubTab('attendanceReport')">Attendance Report</a> |
+            <a href="#" onclick="showSubTab('requestOD')">Request OD</a>
+
+            <div id="attendanceReport" class="tab-content">
+                <h4>Attendance Report</h4>
+                <div class="attendance-report">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Course 1</td>
+                                <td>85%</td>
+                            </tr>
+                            <tr>
+                                <td>Course 2</td>
+                                <td>85%</td>
+                            </tr>
+                            <tr>
+                                <td>Course 3</td>
+                                <td>85%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="requestOD" class="tab-content">
+                <h4>Request OD</h4>
+                <p>Request for On Duty.</p>
+            </div>
+        </div>
+
+        <div id="assignment" class="tab-content">
+            <h3>Assignment</h3>
+            <p>View your assignments here.</p>
+            <a href="#" target="_blank">New Assignment</a>
+        </div>
+
+        <div id="examination" class="tab-content">
+            <h3>Examination</h3>
+            <a href="#" onclick="showSubTab('internalMarks')">Internal Marks</a> |
+            <a href="#" onclick="showSubTab('noDue')">No Due</a> |
+            <a href="#" onclick="showSubTab('revaluation')">Revaluation</a>
+
+            <div id="internalMarks" class="tab-content">
+                <h4>Internal Marks</h4>
+                <p>View your internal marks.</p>
+            </div>
+
+            <div id="noDue" class="tab-content">
+                <h4>No Due</h4>
+                <p>Check your no due status.</p>
+            </div>
+
+            <div id="revaluation" class="tab-content">
+                <h4>Revaluation</h4>
+                <p>Apply for revaluation.</p>
+            </div>
+        </div>
+
+        <div id="financialRecord" class="tab-content">
+            <h3>Financial Record</h3>
+            <div class="financial-record">
+                <h4>Amount to be Paid for this Year:</h4>
+                <p>₹200,000</p>
+            </div>
+        </div>
+
+        <div id="myProfile" class="tab-content">
+            <h3>My Profile</h3>
+            <div class="profile-info">
+                <img src="https://via.placeholder.com/100" alt="Kandukuri Jagan">
+                <div>
+                    <p><strong>Name:</strong> Kandukuri Jagan</p>
+                    <p><strong>Mail ID:</strong> kandukurijagan99@gmail.com</p>
+                    <p><strong>Date of Birth:</strong> 14/06/2006</p>
+                    <p><strong>Address:</strong> Balijapalem Village, Varadaiah Palem Mandal, Tirupati District, Andhra Pradesh</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            if (username === '192472374' && password === '123') {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('main-page').style.display = 'block';
+                showTab('home');
+                startLogoutTimer();
+            } else {
+                alert('Invalid credentials');
+            }
+        }
+
+        function showTab(tabId) {
+            var tabs = document.getElementsByClassName('tab-content');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = 'none';
+            }
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        function showSubTab(tabId) {
+            var subTabs = document.getElementsByClassName('tab-content');
+            for (var i = 0; i < subTabs.length; i++) {
+                subTabs[i].style.display = 'none';
+            }
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        var logoutTimer;
+
+        function startLogoutTimer() {
+            logoutTimer = setTimeout(logout, 60000); // 1 minute
+        }
+
+        function resetLogoutTimer() {
+            clearTimeout(logoutTimer);
+            startLogoutTimer();
+        }
+
+        function logout() {
+            document.getElementById('main-page').style.display = 'none';
+            document.getElementById('login-page').style.display = 'block';
+            alert('Logged out due to inactivity.');
+        }
+
+        document.addEventListener('click', resetLogoutTimer);
+        document.addEventListener('mousemove', resetLogoutTimer);
+        document.addEventListener('keypress', resetLogoutTimer);
+    </script>
+</body>
+</html>
